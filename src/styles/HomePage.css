@@ -1,0 +1,385 @@
+/* src/styles/HomePage.css
+   LinguaQuest — Game-style design system
+   Fonts: Press Start 2P (logo), Rajdhani (headings/labels), Exo 2 (body)
+   Import in main.jsx: @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+*/
+
+/* ─── TOKENS ──────────────────────────────────────────────────────────────── */
+:root {
+  --bg-deep:        #07090f;
+  --bg-base:        #0d1117;
+  --bg-card:        #111827;
+  --bg-card2:       #161f2e;
+  --border:         #1e2d40;
+  --border-hi:      #2a3f58;
+
+  --gold:           #f5a623;
+  --gold-dim:       #a86d10;
+  --gold-glow:      rgba(245, 166, 35, 0.18);
+
+  --teal:           #10d9a8;
+  --teal-dim:       #0a7a60;
+  --teal-glow:      rgba(16, 217, 168, 0.15);
+
+  --purple:         #a78bfa;
+  --purple-dim:     #5b3fa6;
+  --purple-glow:    rgba(167, 139, 250, 0.15);
+
+  --blue-acc:       #60a5fa;
+  --red:            #f87171;
+
+  --txt-1:          #e2e8f0;
+  --txt-2:          #94a3b8;
+  --txt-3:          #4b5a6e;
+
+  --radius-sm:      6px;
+  --radius-md:      10px;
+  --radius-lg:      16px;
+  --radius-xl:      22px;
+}
+
+/* ─── PAGE LAYOUT ─────────────────────────────────────────────────────────── */
+.lq-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+  font-family: 'Exo 2', sans-serif;
+  color: var(--txt-1);
+}
+
+/* ─── NAVBAR ──────────────────────────────────────────────────────────────── */
+.lq-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.lq-logo            { display: flex; align-items: center; gap: 12px; }
+
+.lq-logo-icon {
+  width: 40px; height: 40px;
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+
+.lq-logo-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  line-height: 1.3;
+}
+
+.lq-logo-sub {
+  font-size: 10px;
+  color: var(--txt-3);
+  font-weight: 400;
+  margin-top: 2px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.lq-nav-right       { display: flex; align-items: center; gap: 16px; }
+
+.lq-streak-badge {
+  display: flex; align-items: center; gap: 6px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 13px; font-weight: 600;
+  color: var(--red);
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.lq-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple-dim), var(--teal-dim));
+  border: 2px solid var(--border-hi);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700; font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.lq-avatar:hover { border-color: var(--teal); }
+
+/* ─── HERO ────────────────────────────────────────────────────────────────── */
+.lq-hero {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.lq-player-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.35s ease both;
+}
+
+.lq-player-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--purple), var(--gold));
+}
+
+.lq-greeting {
+  font-size: 13px; color: var(--txt-3);
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.lq-player-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 32px; font-weight: 700;
+  color: var(--txt-1);
+  margin-bottom: 20px;
+}
+.lq-player-name span { color: var(--teal); }
+
+.lq-level-row       { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+
+.lq-level-badge {
+  background: var(--gold-glow);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700; font-size: 14px;
+  color: var(--gold);
+}
+
+.lq-xp-info         { font-size: 12px; color: var(--txt-3); font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+
+.lq-xp-bar-wrap {
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px; height: 8px; overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.lq-xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--teal-dim));
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+.lq-stats-row       { display: flex; gap: 20px; }
+.lq-stat            { display: flex; flex-direction: column; gap: 2px; }
+.lq-stat-val        { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; }
+.lq-stat-lbl        { font-size: 11px; color: var(--txt-3); text-transform: uppercase; letter-spacing: 1.5px; }
+.lq-stat-divider    { width: 1px; background: var(--border); align-self: stretch; }
+
+/* Daily Card */
+.lq-daily-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+  animation: fadeInUp 0.35s ease 0.08s both;
+}
+
+.lq-daily-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--purple), #ec4899);
+}
+
+.lq-daily-label     { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+
+.lq-pulse-dot {
+  width: 8px; height: 8px;
+  background: var(--purple); border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.85); }
+}
+
+.lq-daily-label-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 2px; text-transform: uppercase;
+}
+
+.lq-daily-title     { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.lq-daily-desc      { font-size: 13px; color: var(--txt-2); margin-bottom: 20px; flex: 1; }
+
+.lq-daily-reward {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 16px;
+  font-family: 'Rajdhani', sans-serif; font-size: 13px;
+  color: var(--gold); font-weight: 600;
+}
+
+.lq-btn-primary {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(135deg, var(--purple-dim), #4c1d95);
+  border: 1px solid var(--purple);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  color: var(--txt-1);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px; font-weight: 700; letter-spacing: 1px;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.2s;
+}
+.lq-btn-primary:hover { background: linear-gradient(135deg, var(--purple), #6d28d9); transform: translateY(-1px); }
+
+/* ─── SECTION HEADER ──────────────────────────────────────────────────────── */
+.lq-section-header  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.lq-section-title   { font-family: 'Rajdhani', sans-serif; font-size: 12px; font-weight: 700; color: var(--txt-3); letter-spacing: 2.5px; text-transform: uppercase; }
+.lq-section-link    { font-size: 12px; color: var(--teal); text-decoration: none; font-family: 'Rajdhani', sans-serif; font-weight: 600; letter-spacing: 1px; }
+
+/* ─── QUEST GRID ──────────────────────────────────────────────────────────── */
+.lq-quest-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.lq-quest-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative; overflow: hidden;
+  animation: fadeInUp 0.4s ease both;
+}
+
+.lq-quest-card:nth-child(1) { animation-delay: 0.05s; }
+.lq-quest-card:nth-child(2) { animation-delay: 0.12s; }
+.lq-quest-card:nth-child(3) { animation-delay: 0.19s; }
+.lq-quest-card:nth-child(4) { animation-delay: 0.26s; }
+
+.lq-quest-card:not(.locked):hover { border-color: var(--border-hi); transform: translateY(-2px); }
+.lq-quest-card.locked             { opacity: 0.55; cursor: not-allowed; }
+
+/* Color accent bar left */
+.lq-quest-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+.lq-quest-card.q-teal::before   { background: var(--teal); }
+.lq-quest-card.q-gold::before   { background: var(--gold); }
+.lq-quest-card.q-purple::before { background: var(--purple); }
+.lq-quest-card.q-blue::before   { background: var(--blue-acc); }
+
+.lq-quest-top       { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+
+.lq-quest-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+}
+
+.q-teal   .lq-quest-icon { background: var(--teal-glow);   border: 1px solid var(--teal-dim); }
+.q-gold   .lq-quest-icon { background: var(--gold-glow);   border: 1px solid var(--gold-dim); }
+.q-purple .lq-quest-icon { background: var(--purple-glow); border: 1px solid var(--purple-dim); }
+.q-blue   .lq-quest-icon { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); }
+
+.lq-quest-badge     { font-family: 'Rajdhani', sans-serif; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px; }
+.badge-active       { background: rgba(16,217,168,0.1); color: var(--teal);   border: 1px solid var(--teal-dim); }
+.badge-new          { background: var(--gold-glow);     color: var(--gold);   border: 1px solid var(--gold-dim); }
+.badge-soon         { background: rgba(255,255,255,0.05); color: var(--txt-3); border: 1px solid var(--border); }
+
+.lq-quest-name      { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.lq-quest-desc      { font-size: 12px; color: var(--txt-2); margin-bottom: 16px; line-height: 1.5; }
+
+.lq-quest-progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.lq-quest-progress-label { font-size: 11px; color: var(--txt-3); font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
+.lq-quest-progress-val  { font-size: 11px; font-family: 'Rajdhani', sans-serif; font-weight: 700; }
+
+.q-teal   .lq-quest-progress-val { color: var(--teal); }
+.q-gold   .lq-quest-progress-val { color: var(--gold); }
+.q-purple .lq-quest-progress-val { color: var(--purple); }
+.q-blue   .lq-quest-progress-val { color: var(--blue-acc); }
+
+.lq-quest-bar       { height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.lq-quest-bar-fill  { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+
+.q-teal   .lq-quest-bar-fill { background: var(--teal); }
+.q-gold   .lq-quest-bar-fill { background: var(--gold); }
+.q-purple .lq-quest-bar-fill { background: var(--purple); }
+.q-blue   .lq-quest-bar-fill { background: var(--blue-acc); }
+
+/* ─── BOTTOM ROW ──────────────────────────────────────────────────────────── */
+.lq-bottom-row      { display: grid; grid-template-columns: 1fr 280px; gap: 20px; }
+
+.lq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px;
+}
+
+/* Activity */
+.lq-activity-list   { display: flex; flex-direction: column; gap: 1px; }
+
+.lq-activity-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.lq-activity-item:last-child { border-bottom: none; }
+
+.lq-dot             { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.dot-teal           { background: var(--teal); }
+.dot-gold           { background: var(--gold); }
+.dot-purple         { background: var(--purple); }
+
+.lq-activity-text   { flex: 1; font-size: 13px; color: var(--txt-2); }
+.lq-activity-xp     { font-family: 'Rajdhani', sans-serif; font-size: 13px; font-weight: 700; color: var(--gold); }
+.lq-activity-time   { font-size: 11px; color: var(--txt-3); font-family: 'Rajdhani', sans-serif; }
+
+/* Achievements */
+.lq-badge-grid      { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+.lq-badge-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 12px 8px;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-align: center; cursor: pointer;
+  transition: border-color 0.2s;
+}
+.lq-badge-item:hover            { border-color: var(--border-hi); }
+.lq-badge-item.earned           { border-color: var(--gold-dim); background: var(--gold-glow); }
+
+.lq-badge-emoji     { font-size: 24px; }
+.lq-badge-name      { font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700; color: var(--txt-3); letter-spacing: 0.5px; line-height: 1.2; }
+.lq-badge-item.earned .lq-badge-name { color: var(--gold); }
+
+/* ─── ANIMATIONS ──────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ──────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .lq-hero, .lq-quest-grid, .lq-bottom-row { grid-template-columns: 1fr; }
+}
