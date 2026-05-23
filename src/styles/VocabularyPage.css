@@ -1,0 +1,459 @@
+/* src/styles/VocabularyPage.css
+   Quest de Vocabulario — Flashcards con animación 3D
+*/
+
+/* ─── PAGE ──────────────────────────────────────────────────────────────────── */
+.vq-page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 20px 60px;
+  font-family: 'Exo 2', sans-serif;
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ─── HEADER ─────────────────────────────────────────────────────────────────── */
+.vq-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.vq-back-btn {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+.vq-back-btn:hover { color: #10d9a8; }
+
+.vq-header-center { text-align: center; flex: 1; }
+
+.vq-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.vq-subtitle {
+  font-size: 11px;
+  color: #4b5a6e;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.vq-session-xp {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #f5a623;
+  white-space: nowrap;
+}
+
+/* ─── BARRA PROGRESO ─────────────────────────────────────────────────────────── */
+.vq-progress-wrap {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.vq-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.vq-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10d9a8, #0a7a60);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.vq-progress-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px;
+  color: #4b5a6e;
+  white-space: nowrap;
+}
+
+/* ─── STATS SESIÓN ───────────────────────────────────────────────────────────── */
+.vq-session-stats {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 28px;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.vq-stat-correct   { color: #10d9a8; }
+.vq-stat-wrong     { color: #f87171; }
+.vq-stat-remaining { color: #4b5a6e; font-weight: 400; font-size: 12px; margin-left: auto; }
+
+/* ─── FLASHCARD SCENE (perspectiva 3D) ──────────────────────────────────────── */
+.vq-scene {
+  width: 100%;
+  max-width: 460px;
+  height: 280px;
+  perspective: 1000px;
+  cursor: pointer;
+  margin-bottom: 28px;
+  flex-shrink: 0;
+}
+
+.vq-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease;
+  border-radius: 16px;
+}
+
+.vq-card:hover {
+  box-shadow: 0 8px 32px rgba(16, 217, 168, 0.08);
+}
+
+.vq-card.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Feedback de respuesta */
+.vq-card.result-correct {
+  box-shadow: 0 0 0 2px #10d9a8, 0 8px 32px rgba(16, 217, 168, 0.2);
+}
+.vq-card.result-wrong {
+  box-shadow: 0 0 0 2px #f87171, 0 8px 32px rgba(248, 113, 113, 0.2);
+}
+
+/* ─── CARA FRONTAL ───────────────────────────────────────────────────────────── */
+.vq-card-front,
+.vq-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  border: 1px solid #1e2d40;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 32px;
+  background: #111827;
+}
+
+.vq-card-front::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10d9a8, #a78bfa);
+  border-radius: 16px 16px 0 0;
+}
+
+.vq-card-hint {
+  font-size: 11px;
+  color: #4b5a6e;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: absolute;
+  top: 18px;
+}
+
+.vq-word-type {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.vq-word {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.vq-phonetic {
+  font-size: 15px;
+  color: #94a3b8;
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+/* Dots de nivel */
+.vq-level-dots {
+  display: flex;
+  gap: 8px;
+  position: absolute;
+  bottom: 18px;
+}
+
+.vq-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid #1e2d40;
+  transition: all 0.3s;
+}
+
+.vq-dot.filled {
+  background: #10d9a8;
+  border-color: #0a7a60;
+}
+
+/* ─── CARA TRASERA ───────────────────────────────────────────────────────────── */
+.vq-card-back {
+  transform: rotateY(180deg);
+  border-color: rgba(16, 217, 168, 0.2);
+  background: #0f1a2a;
+  gap: 16px;
+}
+
+.vq-card-back::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10d9a8, #a78bfa);
+  border-radius: 16px 16px 0 0;
+}
+
+.vq-translation {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #10d9a8;
+  text-align: center;
+}
+
+.vq-example-wrap {
+  text-align: center;
+  width: 100%;
+}
+
+.vq-example-label {
+  font-size: 10px;
+  color: #4b5a6e;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.vq-example {
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.5;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+.vq-example-es {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+/* ─── BOTONES DE RESPUESTA ───────────────────────────────────────────────────── */
+.vq-answer-btns {
+  display: flex;
+  gap: 14px;
+  width: 100%;
+  max-width: 460px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+  margin-bottom: 16px;
+}
+
+.vq-answer-btns.visible {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0);
+}
+
+.vq-btn-wrong,
+.vq-btn-correct {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: 1px solid;
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.vq-btn-wrong {
+  background: rgba(248, 113, 113, 0.08);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.vq-btn-wrong:hover {
+  background: rgba(248, 113, 113, 0.18);
+  border-color: #f87171;
+  transform: translateY(-1px);
+}
+
+.vq-btn-correct {
+  background: rgba(16, 217, 168, 0.08);
+  border-color: rgba(16, 217, 168, 0.3);
+  color: #10d9a8;
+}
+
+.vq-btn-correct:hover {
+  background: rgba(16, 217, 168, 0.18);
+  border-color: #10d9a8;
+  transform: translateY(-1px);
+}
+
+.vq-btn-key {
+  font-size: 11px;
+  opacity: 0.5;
+  position: absolute;
+  right: 12px;
+}
+
+/* ─── KEYBOARD HINT ──────────────────────────────────────────────────────────── */
+.vq-keyboard-hint {
+  display: flex;
+  gap: 20px;
+  font-size: 11px;
+  color: #4b5a6e;
+  font-family: 'Rajdhani', sans-serif;
+  letter-spacing: 0.5px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ─── PANTALLA FINAL ─────────────────────────────────────────────────────────── */
+.vq-finish-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  text-align: center;
+  gap: 16px;
+  animation: fadeInUp 0.4s ease;
+}
+
+.vq-finish-icon   { font-size: 64px; margin-bottom: 8px; }
+
+.vq-finish-title  {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #f5a623;
+}
+
+.vq-finish-sub {
+  font-size: 15px;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.vq-finish-stats {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  background: #111827;
+  border: 1px solid #1e2d40;
+  border-radius: 12px;
+  padding: 20px 32px;
+  margin: 8px 0 16px;
+}
+
+.vq-finish-stat { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.vq-finish-val  { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; }
+.vq-finish-lbl  { font-size: 11px; color: #4b5a6e; text-transform: uppercase; letter-spacing: 1px; font-family: 'Rajdhani', sans-serif; }
+.vq-finish-divider { width: 1px; height: 40px; background: #1e2d40; }
+
+.vq-correct-color { color: #10d9a8; }
+.vq-wrong-color   { color: #f87171; }
+
+.vq-finish-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.vq-btn-restart {
+  padding: 12px 24px;
+  background: rgba(16, 217, 168, 0.1);
+  border: 1px solid #0a7a60;
+  border-radius: 10px;
+  color: #10d9a8;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.vq-btn-restart:hover { background: rgba(16, 217, 168, 0.2); transform: translateY(-1px); }
+
+.vq-btn-home {
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid #1e2d40;
+  border-radius: 10px;
+  color: #94a3b8;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.vq-btn-home:hover { border-color: #2a3f58; color: #e2e8f0; }
+
+/* ─── ANIMACIONES ────────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .vq-word     { font-size: 34px; }
+  .vq-scene    { height: 240px; }
+  .vq-btn-key  { display: none; }
+  .vq-keyboard-hint { display: none; }
+}
