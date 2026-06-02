@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { VOCABULARY, XP_PER_CORRECT, XP_PER_SESSION_BONUS } from '../data/vocabulary';
 import '../styles/VocabularyPage.css';
 
+import { addXP, saveWordProgress } from '../services/api';
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 // Inicializa el estado de progreso de cada palabra
@@ -68,56 +70,54 @@ export default function VocabularyPage() {
   };
 
   // ── Respuesta del usuario ────────────────────────────────────────────────────
-  const handleAnswer = useCallback((knew) => {
-    if (!currentWord || !isFlipped) return;
+const handleAnswer = useCallback(async (knew) => {
+  if (!currentWord || !isFlipped) return;
 
-    // Actualizar progreso de la palabra
-    const updatedWords = words.map((w) => {
-      if (w.id !== currentWord.id) return w;
-      const newLevel = knew
-        ? Math.min(w.level + 1, 3)
-        : 0;
-      return {
-        ...w,
-        level:    newLevel,
-        attempts: w.attempts + 1,
-        correct:  w.correct + (knew ? 1 : 0),
-      };
-    });
+  // Guardar en backend
+  try {
+    await saveWordProgress(currentWord.id, knew);
+    if (knew) await addXP(XP_PER_CORRECT);
+  } catch (error) {
+    console.error('Error guardando progreso:', error);
+  }
 
-    setWords(updatedWords);
+  // Actualizar estado local (igual que antes)
+  const updatedWords = words.map((w) => {
+    if (w.id !== currentWord.id) return w;
+    const newLevel = knew ? Math.min(w.level + 1, 3) : 0;
+    return {
+      ...w,
+      level:    newLevel,
+      attempts: w.attempts + 1,
+      correct:  w.correct + (knew ? 1 : 0),
+    };
+  });
 
-    // XP y estadísticas de sesión
-    if (knew) {
-      setSessionXP((prev) => prev + XP_PER_CORRECT);
-      setSessionCorrect((prev) => prev + 1);
+  setWords(updatedWords);
+  if (knew) {
+    setSessionXP((prev) => prev + XP_PER_CORRECT);
+    setSessionCorrect((prev) => prev + 1);
+  } else {
+    setSessionWrong((prev) => prev + 1);
+  }
+
+  setShowResult(knew ? 'correct' : 'wrong');
+
+  setTimeout(() => {
+    setShowResult(null);
+    setIsFlipped(false);
+    const newQueue = buildQueue(updatedWords);
+    if (newQueue.length === 0) {
+      setSessionXP((prev) => prev + XP_PER_SESSION_BONUS);
+      setFinished(true);
     } else {
-      setSessionWrong((prev) => prev + 1);
+      setQueue(newQueue);
+      setCurrentIdx((prev) =>
+        prev < newQueue.length - 1 ? prev + 1 : 0
+      );
     }
-
-    // Mostrar feedback visual brevemente
-    setShowResult(knew ? 'correct' : 'wrong');
-
-    setTimeout(() => {
-      setShowResult(null);
-      setIsFlipped(false);
-
-      // Reconstruir cola con el progreso actualizado
-      const newQueue = buildQueue(updatedWords);
-
-      if (newQueue.length === 0) {
-        // ¡Todas las palabras dominadas!
-        setSessionXP((prev) => prev + XP_PER_SESSION_BONUS);
-        setFinished(true);
-      } else {
-        setQueue(newQueue);
-        // Avanzar al siguiente o volver al inicio de la nueva cola
-        setCurrentIdx((prev) =>
-          prev < newQueue.length - 1 ? prev + 1 : 0
-        );
-      }
-    }, 700);
-  }, [currentWord, isFlipped, words]);
+  }, 700);
+}, [currentWord, isFlipped, words]);
 
   // ── Reiniciar sesión ─────────────────────────────────────────────────────────
   const handleRestart = () => {

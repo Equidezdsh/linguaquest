@@ -2,8 +2,11 @@
 // LinguaQuest — Home Page Component
 // Stack: React 18 + Vite + React Router
 
+// src/pages/HomePage.jsx
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
+import { getProgress } from '../services/api';
 
 // ─── Static mock data (luego vendrá de la API) ───────────────────────────────
 const PLAYER = {
@@ -83,24 +86,37 @@ const QUESTS = [
 ];
 
 const ACTIVITY = [
-  { dot: 'teal',   text: '10 new words learned in Vocabulary Quest', xp: 50,  time: '2h ago' },
-  { dot: 'gold',   text: 'Present Simple quest completed ✓',          xp: 120, time: 'Yesterday' },
-  { dot: 'purple', text: 'Daily Challenge — 8/10 correct',            xp: 80,  time: 'Yesterday' },
-  { dot: 'teal',   text: '15 words reviewed — Spaced repetition',     xp: 30,  time: '2 days ago' },
+  { dot: 'teal', text: '10 new words learned in Vocabulary Quest', xp: 50, time: '2h ago' },
+  { dot: 'gold', text: 'Present Simple quest completed ✓', xp: 120, time: 'Yesterday' },
+  { dot: 'purple', text: 'Daily Challenge — 8/10 correct', xp: 80, time: 'Yesterday' },
+  { dot: 'teal', text: '15 words reviewed — Spaced repetition', xp: 30, time: '2 days ago' },
 ];
 
 const ACHIEVEMENTS = [
-  { emoji: '🔥', name: '7-Day Streak',     earned: true },
-  { emoji: '📖', name: 'First 100 Words',  earned: true },
-  { emoji: '⚡', name: 'Grammar Starter',  earned: true },
-  { emoji: '🏆', name: '500 Words',        earned: false },
-  { emoji: '🌟', name: 'Perfect Score',    earned: false },
-  { emoji: '🗡️', name: 'Tense Master',    earned: false },
+  { emoji: '🔥', name: '7-Day Streak', earned: true },
+  { emoji: '📖', name: 'First 100 Words', earned: true },
+  { emoji: '⚡', name: 'Grammar Starter', earned: true },
+  { emoji: '🏆', name: '500 Words', earned: false },
+  { emoji: '🌟', name: 'Perfect Score', earned: false },
+  { emoji: '🗡️', name: 'Tense Master', earned: false },
 ];
+
+
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function HomePage() {
-  const xpPercent = Math.round((PLAYER.xp / PLAYER.xpNext) * 100);
+
+  // Cargar datos reales del backend al montar el componente
+  const [playerData, setPlayerData] = useState(null);
+
+  useEffect(() => {
+    getProgress()
+      .then(data => setPlayerData(data))
+      .catch(err => console.error('Error cargando progreso:', err));
+  }, []);
+
+  const xp = playerData?.xp ?? PLAYER.xp;
+  const xpPercent = Math.round((xp / PLAYER.xpNext) * 100);
 
   return (
     <div className="lq-page">
@@ -132,9 +148,9 @@ export default function HomePage() {
           </h1>
 
           <div className="lq-level-row">
-            <span className="lq-level-badge">⚡ LEVEL {PLAYER.level}</span>
+            <span className="lq-level-badge">⚡ LEVEL {playerData?.level ?? PLAYER.level}</span>
             <span className="lq-xp-info">
-              {PLAYER.xp} / {PLAYER.xpNext} XP · {PLAYER.rank}
+              {xp} / {PLAYER.xpNext} XP · {PLAYER.rank}
             </span>
           </div>
 
@@ -144,7 +160,7 @@ export default function HomePage() {
 
           <div className="lq-stats-row">
             <div className="lq-stat">
-              <span className="lq-stat-val">{PLAYER.wordsLearned}</span>
+              <span className="lq-stat-val">{playerData?.wordsLearned ?? PLAYER.wordsLearned}</span>
               <span className="lq-stat-lbl">Words learned</span>
             </div>
             <div className="lq-stat-divider" />
@@ -248,7 +264,7 @@ function QuestCard({ quest }) {
 
   const statusBadge = {
     active: <span className="lq-quest-badge badge-active">IN PROGRESS</span>,
-    new:    <span className="lq-quest-badge badge-new">NEW</span>,
+    new: <span className="lq-quest-badge badge-new">NEW</span>,
     locked: <span className="lq-quest-badge badge-soon">COMING SOON</span>,
   }[quest.status];
 
