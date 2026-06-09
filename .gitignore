@@ -10,3 +10,6 @@ backend/linguaquest.db
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+backend/*.db
+backend/*.db-shm
+backend/*.db-wal
