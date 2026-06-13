@@ -13,3 +13,4 @@ backend/linguaquest.db
 backend/*.db
 backend/*.db-shm
 backend/*.db-wal
+backend/data/

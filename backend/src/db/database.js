@@ -6,7 +6,7 @@ const Database = require('better-sqlite3');
 const path = require('path');
 
 // El archivo .db se crea automáticamente en backend/
-const db = new Database(path.join(__dirname, '../../linguaquest.db'));
+const db = new Database(path.join(__dirname, '../../data/linguaquest.db'));
 
 // Optimizaciones de SQLite
 db.pragma('journal_mode = WAL');

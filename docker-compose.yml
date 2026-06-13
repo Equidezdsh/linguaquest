@@ -1,0 +1,21 @@
+# docker-compose.yml
+# Orquesta frontend + backend de LinguaQuest
+
+services:
+  backend:
+    build: ./backend
+    container_name: linguaquest-backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend/data:/app/data
+    environment:
+      - PORT=3001
+
+  frontend:
+    build: .
+    container_name: linguaquest-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
