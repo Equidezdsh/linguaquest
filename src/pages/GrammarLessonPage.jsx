@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { GRAMMAR_TENSES, XP_PER_CORRECT_GRAMMAR, XP_TENSE_MASTERED_BONUS, PASS_THRESHOLD } from '../data/grammar';
 import '../styles/GrammarPage.css';
+import { saveTenseProgress } from '../services/api';
+
 
 const GROUP_COLOR = { present: 'blue', past: 'gold', future: 'purple' };
 
@@ -45,15 +47,22 @@ export default function GrammarLessonPage() {
   };
 
   // ── Avanzar a la siguiente pregunta o terminar ──────────────────────────────
-  const handleNext = () => {
-    if (questionIdx < totalQuestions - 1) {
-      setQuestionIdx((prev) => prev + 1);
-      setSelected(null);
-      setAnswered(false);
-    } else {
-      setMode('result');
-    }
-  };
+ const handleNext = () => {
+  if (questionIdx < totalQuestions - 1) {
+    setQuestionIdx((prev) => prev + 1);
+    setSelected(null);
+    setAnswered(false);
+  } else {
+    setMode('result');
+
+    // Guardar en backend al terminar el quiz
+    const finalPassed = score / totalQuestions >= PASS_THRESHOLD;
+    const finalXp = score * XP_PER_CORRECT_GRAMMAR + (finalPassed ? XP_TENSE_MASTERED_BONUS : 0);
+
+    saveTenseProgress(tense.id, finalPassed, score, finalXp)
+      .catch((err) => console.error('Error guardando progreso:', err));
+  }
+};
 
   const handleRetry = () => {
     setMode('lesson');

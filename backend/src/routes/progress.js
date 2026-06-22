@@ -92,5 +92,68 @@ router.post('/word', (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// ─── POST /api/progress/tense ────────────────────────────────────────────────
+// Guarda el resultado de completar un tiempo verbal (Grammar Quest)
+router.post('/tense', (req, res) => {
+  try {
+    const { tenseId, passed, score, xpEarned } = req.body;
+    if (tenseId === undefined) {
+      return res.status(400).json({ error: 'tenseId es requerido' });
+    }
 
+    const questId = `grammar_tense_${tenseId}`;
+    const status  = passed ? 'completed' : 'active';
+
+    const existing = db.prepare(
+      'SELECT * FROM quest_progress WHERE user_id = 1 AND quest_id = ?'
+    ).get(questId);
+
+    if (existing) {
+      db.prepare(`
+        UPDATE quest_progress
+        SET status = ?, score = ?, completed_at = CASE WHEN ? = 'completed' THEN date('now') ELSE completed_at END
+        WHERE user_id = 1 AND quest_id = ?
+      `).run(status, score, status, questId);
+    } else {
+      db.prepare(`
+        INSERT INTO quest_progress (user_id, quest_id, status, score, completed_at)
+        VALUES (1, ?, ?, ?, ?)
+      `).run(questId, status, score, status === 'completed' ? new Date().toISOString().split('T')[0] : null);
+    }
+
+    // Sumar XP igual que con vocabulary
+    if (xpEarned > 0) {
+      const user = db.prepare('SELECT * FROM users WHERE id = 1').get();
+      const newXp = user.xp + xpEarned;
+      const newLevel = Math.floor(newXp / 1000) + 1;
+      db.prepare(
+        'UPDATE users SET xp = ?, level = ?, last_active = date(\'now\') WHERE id = 1'
+      ).run(newXp, newLevel);
+    }
+
+    res.json({ tenseId, status, score });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ─── GET /api/progress/grammar ───────────────────────────────────────────────
+// Devuelve la lista de tiempos verbales completados
+router.get('/grammar', (req, res) => {
+  try {
+    const rows = db.prepare(`
+      SELECT quest_id, status, score, completed_at
+      FROM quest_progress
+      WHERE user_id = 1 AND quest_id LIKE 'grammar_tense_%' AND status = 'completed'
+    `).all();
+
+    const completedTenseIds = rows.map((row) =>
+      Number(row.quest_id.replace('grammar_tense_', ''))
+    );
+
+    res.json({ completedTenseIds });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;

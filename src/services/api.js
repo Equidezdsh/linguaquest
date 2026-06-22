@@ -31,3 +31,21 @@ export async function saveWordProgress(wordId, knew) {
   if (!res.ok) throw new Error('Error guardando palabra');
   return res.json();
 }
+
+// ─── Guardar progreso de un tiempo verbal ─────────────────────────────────────
+export async function saveTenseProgress(tenseId, passed, score, xpEarned) {
+  const res = await fetch(`${BASE_URL}/progress/tense`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tenseId, passed, score, xpEarned }),
+  });
+  if (!res.ok) throw new Error('Error guardando progreso de tiempo verbal');
+  return res.json();
+}
+
+// ─── Obtener tiempos verbales completados ─────────────────────────────────────
+export async function getGrammarProgress() {
+  const res = await fetch(`${BASE_URL}/progress/grammar`);
+  if (!res.ok) throw new Error('Error obteniendo progreso de gramática');
+  return res.json();
+}

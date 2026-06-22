@@ -1,10 +1,12 @@
 // src/pages/GrammarPage.jsx
 // Mapa de la Grammar Quest — lista los 12 tiempos verbales agrupados
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GRAMMAR_TENSES } from '../data/grammar';
+import { getGrammarProgress } from '../services/api';
 import '../styles/GrammarPage.css';
+
 
 const GROUPS = [
   { key: 'present', label: 'Present Tenses', labelEs: 'Tiempos Presentes', icon: '☀️', color: 'blue' },
@@ -14,7 +16,13 @@ const GROUPS = [
 
 export default function GrammarPage() {
   // Progreso local — en el siguiente paso lo conectamos al backend
-  const [completedTenses] = useState([]); // array de ids completados
+  const [completedTenses, setCompletedTenses] = useState([]); // array de ids completados
+
+  useEffect(() => {
+  getGrammarProgress()
+    .then((data) => setCompletedTenses(data.completedTenseIds))
+    .catch((err) => console.error('Error cargando progreso de gramática:', err));
+}, []);
 
   const totalCompleted = completedTenses.length;
   const totalTenses = GRAMMAR_TENSES.length;
